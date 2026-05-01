@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from router.user import get_current_user
 from app.config import templates, BASE_DIR
+import os
 
 
 app = FastAPI()
@@ -14,10 +15,10 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 
-
+print(os.path.join(BASE_DIR,"templates"))
 @app.get("/", response_class=HTMLResponse)
 def home_page(request: Request):
-    return templates.TemplateResponse(name="home.html",context={"request": request})
+    return templates.TemplateResponse("home.html", {"request": request})
 
 @app.get("/get_user", response_class=HTMLResponse)
 def user_page(request: Request,db:Session = Depends(get_db)):
