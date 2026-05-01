@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, status, HTTPException, BackgroundTasks,Form, Request
 from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from datetime import datetime , timedelta
 from jose import JWTError, jwt
 import logging
 from app.database import engine, get_db
 from sqlalchemy.orm import Session
 from app.model import User
-from app.config import templates
+from app.config import env
 from app.password import hash_password,pass_context,verify_password
 
 router = APIRouter(
@@ -94,7 +94,10 @@ def register(background_task:BackgroundTasks,
     existing = db.query(User).filter(User.email== email).first()
     
     if existing:
-        return templates.TemplateResponse("regmes.html", {"request": request, "msg":"Email already existed" })
+        template = env.get_template("regmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Email already existed")
+        )
 
 
     password = hash_password(password)
@@ -111,16 +114,27 @@ def register(background_task:BackgroundTasks,
     db.refresh(new)
     background_task.add_task(login_mail,email)
 
-
-    return templates.TemplateResponse("regmes.html", {"request": request, "msg":"Registration Successful" })
+    template = env.get_template("regmes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Registration Successful")
+    )
 
 @router.post("/login")
 def login(request:Request,from_data:OAuth2PasswordRequestForm = Depends(),db:Session = Depends(get_db)):
+
     user = db.query(User).filter(User.name == from_data.username).first()
+
     if not user:
-        return templates.TemplateResponse("logmes.html", {"request": request, "msg":"Invalid User name" })
+        template = env.get_template("logmes.html")
+        return RedirectResponse(
+        template.render(request=request, msg="Invalid User name")
+        )
+    
     if not pass_context.verify(from_data.password,user.password):
-        return templates.TemplateResponse("logmes.html", {"request": request, "msg":"Invalid Password" })
+        template = env.get_template("logmes.html")
+        return RedirectResponse(
+        template.render(request=request, msg="Invalid Password")
+        )
 
     token_data = {"sub":user.name,"role":user.role}
     token = create_access_token(token_data)

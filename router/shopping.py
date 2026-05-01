@@ -1,18 +1,17 @@
 from fastapi import APIRouter , Depends , status , HTTPException, Form,Request, BackgroundTasks 
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse,HTMLResponse
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.model import Product , User , Cart , Order
 from .user import get_current_user 
-from fastapi.templating import Jinja2Templates
 import logging
+from app.config import env
+
 
 router = APIRouter(
     prefix="/Shopping",
     tags=["Shopping"]
 )
-
-templates = Jinja2Templates(directory="templates")
 
 #?----------Cart-----------
 
@@ -27,11 +26,17 @@ def AddToCart(
 
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
-        return templates.TemplateResponse("addcartmes.html", {"request": request, "msg":"Product not found" }) 
+        template = env.get_template("addcartmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product Not Found")
+        )
 
     
     if product.stock <= quantity:
-        return templates.TemplateResponse("addcartmes.html", {"request": request, "msg":"Insufficient stock" }) 
+        template = env.get_template("addcartmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Insufficient stock")
+        )
     
     existing = db.query(Cart).filter(
         Cart.user_id == current_user.id,
@@ -39,7 +44,10 @@ def AddToCart(
     ).first()
 
     if existing:
-        return templates.TemplateResponse("addcartmes.html", {"request": request, "msg":"Product Already Present" }) 
+        template = env.get_template("addcartmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product Already Present")
+        )
         
     else:
 
@@ -62,8 +70,10 @@ def AddToCart(
     
     db.commit()
 
-
-    return templates.TemplateResponse("addcartmes.html", {"request": request,"msg": "Product added to cart successfully ✅"}) 
+    template = env.get_template("addcartmes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Product added to cart successfully ✅")
+    )
 
 
 @router.get("/cart")
@@ -89,7 +99,10 @@ def delete_cart(
 
     cart = db.query(Cart).filter(Cart.id == id).first()
     if not cart:
-        return templates.TemplateResponse("deletecartmes.html", {"request": request, "msg":"Product not found" }) 
+        template = env.get_template("deletecartmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product Not Found")
+        )
     
     db.query(Product).filter(Product.id == Cart.Product_id).update({Product.stock: Product.stock + Cart.quantity})
 
@@ -97,7 +110,10 @@ def delete_cart(
     db.delete(cart)
     db.commit()
     
-    return templates.TemplateResponse("deletecartmes.html", {"request": request,"msg":"cart item deleted"}) 
+    template = env.get_template("deletecartmes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Cart Item Deleted")
+    )
 
 #?----------Order-----------
 
@@ -121,11 +137,17 @@ def Place_Order(background_tasks:BackgroundTasks,
     product = db.query(Product).filter(Product.id == product_id).first()
 
     if not product:
-        return templates.TemplateResponse("addordermes.html", {"request": request,"msg":"Product Not Found"}) 
+        template = env.get_template("addordermes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product Not Found")
+        )
     
     
     if product.stock < quantity:
-        return templates.TemplateResponse("addordermes.html", {"request": request,"msg":"Insufficient Stock"}) 
+        template = env.get_template("addordermes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Insufficient Stock")
+        )
         
 
     new = Order(
@@ -141,7 +163,10 @@ def Place_Order(background_tasks:BackgroundTasks,
         
 
     if existing:
-        return templates.TemplateResponse("addordermes.html", {"request": request,"msg":"Product already present in orders"}) 
+        template = env.get_template("addordermes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product already present in orders")
+        )
     
     
     db.query(Product).filter(Product.id == product_id).update({Product.stock: Product.stock - quantity})
@@ -154,7 +179,10 @@ def Place_Order(background_tasks:BackgroundTasks,
 
     background_tasks.add_task(order, current_user.email)
 
-    return templates.TemplateResponse("addordermes.html", {"request": request,"msg":"Order Placed Successful"}) 
+    template = env.get_template("addordermes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Order Placed Successful")
+    )
     
 
 
@@ -189,7 +217,10 @@ def delete_order(
         ).first()
     
     if not order:
-        return templates.TemplateResponse("deleteordermes.html", {"request": request,"msg":f"No order with this id {id}"}) 
+        template = env.get_template("deleteordermes.html")
+        return HTMLResponse(
+        template.render(request=request, msg=f"No order with this id {id}")
+        )
     
     db.query(Product).filter(Product.id == Order.Product_id).update({Product.stock: Product.stock + Order.quantity})
 
@@ -198,5 +229,7 @@ def delete_order(
     db.commit()
     background_tasks.add_task(order, current_user.email)
 
-    
-    return templates.TemplateResponse("deleteordermes.html", {"request": request,"msg":"Order Removed"}) 
+    template = env.get_template("deleteordermes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Order Removed")
+    )

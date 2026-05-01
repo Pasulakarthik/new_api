@@ -1,11 +1,11 @@
 from fastapi import APIRouter , Depends , status , HTTPException, Form,Request , Query
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse , HTMLResponse
 from typing import Optional
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.model import Product , User
 from .user import get_current_user 
-from app.config import templates
+from app.config import env
 
 
 
@@ -43,13 +43,12 @@ def Filter_products(
 
     products = query.all()
 
-    return templates.TemplateResponse(
-        "filterproducts.html",
-        {
-            "request": request,
-            "products": products
-        }
+    template = env.get_template("filterproducts.html")
+    return HTMLResponse(
+        template.render(request=request, products=products)
     )
+
+
 
 
 @router.get("/")
@@ -72,11 +71,17 @@ def create_product(
     ):
 
     if current_user.role != "admin":
-        return templates.TemplateResponse("createmes.html", {"request": request, "msg":"Admin only" })    
+        template = env.get_template("createmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Admins only")
+        )
 
     product = db.query(Product).filter(Product.name == name).first()
     if product:
-        return templates.TemplateResponse("createmes.html", {"request": request, "msg":"Product already Present" }) 
+        template = env.get_template("createmes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Product already Present")
+        )
        
     new = Product(
     name = name,
@@ -106,12 +111,18 @@ def update_product(request : Request,
     current_user: User = Depends(get_current_user)):
 
     if current_user.role != "admin":
-        return templates.TemplateResponse("updatemes.html", {"request": request, "msg":"Admin only" })    
+        template = env.get_template("updatemes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Admin only")
+        )
     
     product = db.query(Product).filter(Product.id == id).first()
 
     if not product:
-        return templates.TemplateResponse("updatemes.html", {"request": request, "msg":f"Product with id {id} Not found" }) 
+        template = env.get_template("updatemes.html")
+        return HTMLResponse(
+        template.render(request=request, msg=f"Product with id {id} Not found")
+        )
 
     product.name = name
     product.model = model
@@ -122,7 +133,10 @@ def update_product(request : Request,
 
     db.commit()
 
-    return templates.TemplateResponse("updatemes.html", {"request": request, "msg":f"Product Updated" }) 
+    template = env.get_template("updatemes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Product Updated")
+    )
     
 
 
@@ -134,21 +148,33 @@ def delete_product(
     current_user: User = Depends(get_current_user)):
 
     if current_user.role != "admin":
-        return templates.TemplateResponse("deletemes.html", {"request": request, "msg":"Admin only" })    
+        template = env.get_template("deletemes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="Admin only")
+        )
     
     user = db.query(User).filter(User.email == current_user.email).first()
     
     if not user:
-        return templates.TemplateResponse("deletemes.html", {"request": request, "msg":"User Not Found" })    
+        template = env.get_template("deletemes.html")
+        return HTMLResponse(
+        template.render(request=request, msg="User Not Found")
+        )
     
     product = db.query(Product).filter(Product.id == id).first()
 
     if not product:
-        return templates.TemplateResponse("deletemes.html", {"request": request, "msg":f"Product with id {id} Not found" }) 
+        template = env.get_template("deletemes.html")
+        return HTMLResponse(
+        template.render(request=request, msg=f"Product with id {id} Not found")
+        )
 
     db.delete(product)
     db.commit()
 
-    return templates.TemplateResponse("deletemes.html", {"request": request, "msg":"Product Deleted"}) 
+    template = env.get_template("deletemes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Product Deleted")
+    )
     
      
