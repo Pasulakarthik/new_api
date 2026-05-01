@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create_Product</title>
+            <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+        }
+
+        .container {
+            width: 350px;
+            margin: 100px auto;
+            border: 5px solid gray;
+            padding: 20px;
+            background: #1e2931;
+            border-radius: 8px;
+            box-shadow: 0 0 10px gray;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 0px;
+        }
+
+        button {
+            width: 95%;
+            padding: 8px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Update Product</h2>
+        <form action="/Product/update" method="post">
+            <input type="text" name="id" placeholder="Enter id" required><br><br>
+            <input type="text" name="name" placeholder="Enter Name" required><br><br>
+            <input type="text" name="model" placeholder="Enter Model" required><br><br>
+            <input type="text" name="brand" placeholder="Enter Brand" required><br><br>
+            <input type="text" name="category" placeholder="Enter Category" required><br><br>
+            <input type="text" name="price" placeholder="Enter Price" required><br><br>
+            <input type="text" name="stock" placeholder="Enter Stock"><br><br>
+            <button type="submit">UPDATE PRODUCT</button>
+        </form>
+    </div>
+</body>
+
+</html>

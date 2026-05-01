@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: #0f172a;
+            font-family: Arial, sans-serif;
+            color: #e2e8f0;
+            margin-top: 100px;
+        }
+
+
+        caption {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+        }
+
+        table {
+            width: 60%;
+            text-align: center;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+        }
+
+        table:hover {
+            transform: scale(1.02);
+        }
+        div {
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 10px;
+            row-gap: 20px;
+        }
+        form {
+            text-align: center;
+        }
+
+        button {
+            height: 40px;
+            width: 150px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: rgb(139, 139, 242);
+
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            color: #e2e8f0;
+            text-align: center;
+            font-size: 30px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+
+        <table border="1" align="center">
+            <caption>Cart List</caption>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Model</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>quantity</th>
+                <th>User_id</th>
+                <th>Product_id</th>
+
+            </tr>
+            {% for c in cart %}
+            <tr>
+                <td>{{ c.id }}</td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.model }}</td>
+                <td>{{ c.brand }}</td>
+                <td>{{ c.category }}</td>
+                <td>{{ c.price }}</td>
+                <td>{{ c.quantity }}</td>
+                <td>{{ c.user_id }}</td>
+                <td>{{ c.Product_id }}</td>
+
+
+            </tr>
+            {% endfor %}
+            
+            {% if cart %}
+            {% for c in cart %}
+            ...
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="9">Cart is empty 🛒</td>
+            </tr>
+            {% endif %}
+
+        </table><br><br>
+        <div>
+        <form action="/remove_cart" method="post">
+            <button type="submit">Remove Cart</button>
+        </form>
+        <form id="f1" action="/addcartmes" method="get">
+            <button type="submit">Back</button>
+        </form>
+        </div>
+    </section>
+</body>
+
+</html>

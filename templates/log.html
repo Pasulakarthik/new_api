@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background: #0f172a;
+            font-family: Arial, sans-serif;
+            color: #e2e8f0;
+            margin: 0;
+        }
+        section{
+            height: 250px;
+            width: 370px;
+            margin: 100px auto;
+            border: 5px solid gray;
+            margin-top: 200px;
+            background: #1e2931;
+            border-radius: 8px;
+            box-shadow: 0 0 10px gray;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        input {
+            margin-left: 20px;
+            width: 85%;
+            line-height: 2px;
+            height: 30px;
+            border-radius: 8px;
+            border: 0px;
+        }
+
+        button {
+            margin-left: 20px;
+            background-color: green;
+            color: white;
+            width: 87%;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 8px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <h2>Login</h2>
+        <form action="/user/login" method="post">
+            <input type="text" name="username" placeholder="Enter Name" required><br><br>
+            <input type="password" name="password" placeholder="Enter Password" required><br><br>
+            <button type="submit">Login</button>
+        </form>
+    </section>
+</body>
+
+</html>

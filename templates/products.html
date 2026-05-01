@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: #0f172a;
+            font-family: Arial, sans-serif;
+            color: #e2e8f0;
+            margin-top: 100px;
+        }
+
+
+        caption {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 20px;
+        }
+
+        table {
+            width: 60%;
+            text-align: center;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-radius: 8px;
+        }
+
+        table:hover {
+            transform: scale(1.02);
+        }
+
+        div {
+            display: grid;
+            grid-template-columns: auto auto;
+            column-gap: 15px;
+            row-gap: 20px;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        button {
+            height: 40px;
+            width: 150px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 16px;
+            background-color: rgb(139, 139, 242);
+
+        }
+
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <table border="1" align="center">
+            <caption>Products List</caption>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Model</th>
+                <th>Brand</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+            </tr>
+            {% for p in product %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.name }}</td>
+                <td>{{ p.model }}</td>
+                <td>{{ p.brand }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.price }}</td>
+                <td>{{ p.stock }}</td>
+
+            </tr>
+            {% endfor %}
+
+        </table><br><br>
+        <div>
+
+            <form action="/AddToCart" method="post">
+                <button type="submit">Add To Cart</button>
+            </form>
+            <form action="/cart" method="get">
+                <button type="submit">Show Cart</button>
+            </form>
+
+            <form action="/order" method="post">
+                <button type="submit">Place Order</button>
+            </form>
+            <form action="/get_order" method="get">
+                <button type="submit">Show Orders</button>
+            </form>
+            <form action="/filter" method="get">
+                <button type="submit">Filter</button>
+            </form>
+            <form action="/store" method="get">
+                <button type="submit">Dashboard</button>
+            </form>
+
+        </div>
+
+    </section>
+</body>
+
+</html>

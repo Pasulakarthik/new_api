@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/users.css">
+</head>
+<body>
+    <section>
+    <table border="1" align="center">
+        <caption>Users Info</caption>
+        <tr>
+            <th>Name</th>
+            <th>email</th>
+            <th>password</th>
+            <th>role</th>
+        </tr>
+        {% for u in user %}
+        <tr>
+            <td>{{ u.name }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.password }}</td>
+            <td>{{ u.role }}</td>
+            
+        </tr>
+        {% endfor  %}
+
+    </table>
+    </section>
+</body>
+</html>
