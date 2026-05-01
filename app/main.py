@@ -15,7 +15,7 @@ Base.metadata.create_all(bind=engine)
 
 
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 def home_page(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
