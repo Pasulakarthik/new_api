@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from router.user import get_current_user
 from app.config import templates, BASE_DIR
-import  os
+
 
 app = FastAPI()
 
@@ -15,12 +15,7 @@ Base.metadata.create_all(bind=engine)
 
 
 
-print("CURRENT FILE:", __file__)
-print("BASE DIR:", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-print("TEMPLATE DIR:", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates"))
-print("FILES INSIDE TEMPLATE DIR:", os.listdir(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates")))
-
-@app.get("/")
+@app.api_route("/",methods=["GET","HEAD"])
 def home_page(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
