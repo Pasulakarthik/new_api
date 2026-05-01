@@ -99,6 +99,16 @@
 
             </tr>
             {% endfor %}
+            
+            {% if cart %}
+            {% for c in cart %}
+            ...
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="9">Cart is empty 🛒</td>
+            </tr>
+            {% endif %}
 
         </table><br><br>
         <div>
