@@ -126,13 +126,13 @@ def login(request:Request,from_data:OAuth2PasswordRequestForm = Depends(),db:Ses
 
     if not user:
         template = env.get_template("logmes.html")
-        return RedirectResponse(
+        return HTMLResponse(
         template.render(request=request, msg="Invalid User name")
         )
     
     if not pass_context.verify(from_data.password,user.password):
         template = env.get_template("logmes.html")
-        return RedirectResponse(
+        return HTMLResponse(
         template.render(request=request, msg="Invalid Password")
         )
 
