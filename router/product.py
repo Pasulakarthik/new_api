@@ -96,7 +96,10 @@ def create_product(
     db.commit()
     db.refresh(new)
 
-    return "Product added successful"
+    template = env.get_template("createmes.html")
+    return HTMLResponse(
+    template.render(request=request, msg="Product added successful")
+    )
 
 @router.post("/update")
 def update_product(request : Request,
