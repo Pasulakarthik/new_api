@@ -6,20 +6,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from router.user import get_current_user
-import os
-from fastapi.templating import Jinja2Templates
+from app.config import templates, BASE_DIR
 
 
 app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
-
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-templates = Jinja2Templates(
-    directory=os.path.join(BASE_DIR, "templates")
-)
 
 
 @app.get("/", response_class=HTMLResponse)
