@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from router.user import get_current_user
-from app.config import templates, BASE_DIR
+from app.config import env
 
 
 app = FastAPI()
@@ -15,14 +15,16 @@ Base.metadata.create_all(bind=engine)
 
 
 
-@app.api_route("/",methods=["GET","HEAD"])
+@app.get("/", response_class=HTMLResponse)
 def home_page(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    template = env.get_template("home.html")
+    return HTMLResponse(template.render(request=request))
 
 
 @app.get("/get_user", response_class=HTMLResponse)
 def user_page(request: Request,db:Session = Depends(get_db)):
     user = db.query(User).all()
+    
     return templates.TemplateResponse("users.html", {"request": request , "user":user})
 
 @app.post("/register", response_class=HTMLResponse)

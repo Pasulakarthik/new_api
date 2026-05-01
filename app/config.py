@@ -1,14 +1,7 @@
-import os
-from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from jinja2 import Environment, FileSystemLoader
+import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env = Environment(loader=FileSystemLoader(os.path.join(BASE_DIR, "templates")))
 
-template_dir = os.path.join(BASE_DIR, "templates")
-
-templates = Jinja2Templates(directory=template_dir)
-
-templates.env = Environment(
-    loader=FileSystemLoader(template_dir),
-    cache_size=0  
-)
