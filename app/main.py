@@ -17,7 +17,7 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/", response_class=HTMLResponse)
 def home_page(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    return templates.TemplateResponse("home.html",context={"request": request})
 
 @app.get("/get_user", response_class=HTMLResponse)
 def user_page(request: Request,db:Session = Depends(get_db)):
