@@ -14,8 +14,11 @@ app = FastAPI()
 Base.metadata.create_all(bind=engine)
 
 
-print(os.path.join(BASE_DIR,"templates"))
 
+print("CURRENT FILE:", __file__)
+print("BASE DIR:", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("TEMPLATE DIR:", os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates"))
+print("FILES INSIDE TEMPLATE DIR:", os.listdir(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "templates")))
 
 @app.get("/")
 def home_page(request: Request):
